@@ -15,11 +15,12 @@ s	              return
 "-1 -1"	        "-1 -1"
 */
 
+// 나의 풀이
 function solution(str) {
   let answer = '';
   let s = [];
   let arr = [];
-    
+
   arr = str.split(' ');
   
   for (let i = 0; i < arr.length; i++) {
@@ -30,10 +31,19 @@ function solution(str) {
 
   answer += s[0];
   answer += ' ';
+  answer += s[s.length];
+  
+  return answer;
+}
 
-  s.sort((a, b) => b - a);
-  answer += s[0];
-  
-  
+// 다른 풀이
+function solution(s) {
+  let answer = '';
+  const list = s.split(' ');
+  const max = Math.max(...list);
+  const min = Math.min(...list);
+
+  answer = min + " " + max;
+
   return answer;
 }
