@@ -66,7 +66,17 @@ function solution(N, stages) {
   const userTotal = stages.length;
   const userState = [];
   const failProb = [];
+  const answer = [];
   let userCount = stages.length;
+
+  const exArr = [];
+
+  class Example {
+    constructor(stage, prob) {
+      this.stage = stage;
+      this.prob = prob;
+    }
+  }
 
   // userState 정의 (라운드마다 유저 수 구하기.)
   for (let i = 0; i < N; i++) {
@@ -84,10 +94,26 @@ function solution(N, stages) {
 
   for (let i = 1; i < N; i++) {
     failProb.push(userState[i] / (userCount - userState[i - 1]));
-    // failProb: [ 0.125, 0.42857142857142855, 0.4, 0.16666666666666666, 0 ]
+    userCount -= userState[i - 1];
   }
 
   // 정렬하고 어떻게 순서 나열할것인가.
   // 확률이 같을때? 어떻게 할것인가.
   // 객체 활용?, 그냥 노가다? 가독성은?
+
+  for (let i = 0; i < N; i++) {
+    exArr.push(new Example(i + 1, failProb[i]));
+  }
+
+  exArr.sort(function (a, b) {
+    return a.prob > b.prob ? -1 : a.prob < b.prob ? 1 : 0;
+  });
+
+  for (let i = 0; i < N; i++) {
+    answer.push(exArr[i].stage);
+  }
+
+  return answer;
 }
+
+// 다른 풀이
