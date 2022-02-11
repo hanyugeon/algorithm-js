@@ -62,23 +62,21 @@ N   stages                    result
 [4,1,2,3]
 */
 
+// 나의 (개선 된) 풀이 (02.11)
 function solution(N, stages) {
-  const userTotal = stages.length;
-  const userState = [];
-  const failProb = [];
   const answer = [];
-  let userCount = stages.length;
-
-  const exArr = [];
+  const userState = [];
+  const stageState = [];
+  let userTotal = stages.length;
 
   class Example {
-    constructor(stage, prob) {
+    constructor(stage, failureRate) {
       this.stage = stage;
-      this.prob = prob;
+      this.failureRate = failureRate;
     }
   }
 
-  // userState 정의 (라운드마다 유저 수 구하기.)
+  // userState 정의 (라운드마다 유저 수 구하기)
   for (let i = 0; i < N; i++) {
     let temp = 0;
 
@@ -89,31 +87,27 @@ function solution(N, stages) {
     userState.push(temp);
   }
 
-  // userState와 userCount를 활용하여 실패율 배열(failProb) 정의하기
-  failProb.push(userState[0] / userCount);
+  // 라운드별 객체 생성.
+  stageState.push(new Example(1, userState[0] / userTotal));
+  userTotal -= userState[0];
 
   for (let i = 1; i < N; i++) {
-    failProb.push(userState[i] / (userCount - userState[i - 1]));
-    userCount -= userState[i - 1];
+    const stage = i + 1;
+    const failureRate = userState[i] / userTotal;
+
+    stageState.push(new Example(stage, failureRate));
+    userTotal -= userState[i];
   }
 
-  // 정렬하고 어떻게 순서 나열할것인가.
-  // 확률이 같을때? 어떻게 할것인가.
-  // 객체 활용?, 그냥 노가다? 가독성은?
+  stageState.sort((a, b) => b.failureRate - a.failureRate);
 
   for (let i = 0; i < N; i++) {
-    exArr.push(new Example(i + 1, failProb[i]));
-  }
-
-  exArr.sort(function (a, b) {
-    return a.prob > b.prob ? -1 : a.prob < b.prob ? 1 : 0;
-  });
-
-  for (let i = 0; i < N; i++) {
-    answer.push(exArr[i].stage);
+    answer.push(stageState[i].stage);
   }
 
   return answer;
 }
 
 // 다른 풀이
+// 굳이 객체를 써야하나?
+// https://hanyugeon.tistory.com/8
