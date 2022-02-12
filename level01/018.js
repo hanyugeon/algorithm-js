@@ -35,10 +35,10 @@ function solution(n) {
     }
 
     answer.push(x);
-  }
+  };
 
   for (let i = 2; i <= n; i++) {
-    isPrime(i)
+    isPrime(i);
   }
 
   return answer.length;
@@ -52,3 +52,24 @@ function solution(n) {
   - 들어있다면 정답 집합에 .push()
 - 반복문이 끝나면 정답 집합 길이 반환하기
 */
+
+function solution(n) {
+  const arr = [];
+  let answer = 0;
+
+  for (let i = 2; i <= n; i++) arr.push(i);
+
+  for (let j = 2; j <= n; j++) {
+    if (arr[j] === 0) continue;
+
+    for (let k = j * 2; k <= n; k += j) {
+      arr[k] = 0;
+    }
+  }
+
+  for (let i = 2; i <= n; i++) {
+    if (arr[i] !== 0) answer++;
+  }
+
+  return answer;
+}
