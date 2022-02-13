@@ -13,45 +13,51 @@
 
 // 나의 풀이
 function solution(new_id) {
-  const step02 = new RegExp(/[^a-z0-9_\-.]/, "gi");
-
   // 01
   new_id = new_id.toLowerCase();
 
   // 02
-  new_id = new_id.replace(step02, "");
+  new_id = new_id.replace(/[^a-z0-9_\-.]/gi, "");
 
   // // 03
   // for (let i = 0; i < new_id.length - 1; i++) {
-  //   let temp = []
-  //   if (new_id[i] === '.') temp.push(i);
+  //   if (new_id[i] === '.') {
+
+  //   }
 
   // }
 
   // 04
   if (new_id[0] === ".") new_id = new_id.substr(1);
-  if (new_id[new_id.length - 1] === ".")
-    new_id = new_id.substr(new_id.length - 1);
+  if (new_id[new_id.length - 1] === ".") {
+    new_id = new_id.slice(0, -1);
+  }
 
   // 05
-  if (new_id.length <= 0) new_id = "a";
+  if (new_id === "") new_id += "a";
 
   // 06
   if (new_id.length >= 16) {
-    new_id = new_id.slice[(0, 15)];
+    new_id = new_id.slice(0, 15);
 
-    if (new_id[-1] === ".") {
-      new_id = new_id.slice[(0, -1)];
+    if (new_id.slice(0, -1) === ".") {
+      new_id = new_id.slice(0, 14);
     }
   }
 
   // 07
-  const step07 = new_id[new_id.length - 1];
   if (new_id.length <= 2) {
-    for (let i = new_id.length - 1; i <= 3; i++) {
-      new_id += step07;
+    const word = new_id.substr(-1);
+
+    while (new_id.length < 3) {
+      new_id += word;
     }
   }
 
   return new_id;
 }
+
+let testCase01 = ".A_B-C/1.2.3.4.5.6.7.8.9.0.....";
+let testCase02 = "a";
+console.log(solution(testCase01));
+console.log(solution(testCase02));
