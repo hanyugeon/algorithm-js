@@ -1,27 +1,39 @@
 // 삼각 달팽이(좌표 찍기)
-// 나의 풀이
+// (참고한) 나의 풀이
 function solution(n) {
-  const answer = [];
+  let answer = [];
   let snail = [];
+  let x = 0;
+  let y = -1;
+  let number = 1;
 
   for (let i = 1; i < n + 1; i++) {
     const temp = Array(i).fill(0);
     snail.push(temp);
   }
 
-  
+  for (let i = 0; i < n; i++) {
+    for (let j = i; j < n; j++) {
+      if (i % 3 === 0) {
+        y += 1;
+      } else if (i % 3 === 1) {
+        x += 1;
+      } else {
+        x -= 1;
+        y -= 1;
+      }
 
+      snail[y][x] = number;
+      number++;
+    }
+  }
 
+  for (let i = 0; i < n; i++) {
+    answer = answer.concat(snail[i]);
+  }
 
-  return ;
+  return answer;
 }
-
-/**
- * fill()
- * map()
- * flatMap()
- * concat()
- */
 
 /**
  * 좌표 찍기.
