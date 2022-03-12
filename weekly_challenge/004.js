@@ -42,3 +42,59 @@ function solution(k, dungeons) {
  * 어떻게 공부하면 효율적일까? 그 방법으로
  * 창의적이면서 계산적인 기능구현이 가능할까?
  */
+
+// 다른 풀이
+// 재귀함수 & 완전 탐색 구현
+function solution(k, dungeons) {
+  return dungeons.reduce((result, current, idx) => {
+    let count = 0;
+    let state = k;
+    if (current[0] <= state) {
+      state -= current[1];
+      count++;
+
+      const next = Array.from(dungeons);
+      next.splice(idx, 1);
+      loop(next);
+    }
+
+    return result;
+
+    function loop(dungeons) {
+      dungeons.forEach((current, idx) => {
+        if (current[0] <= state) {
+          state -= current[1];
+          count++;
+          
+          if(dungeons.length > 0) {
+            const next = Array.from(dungeons);
+            next.splice(idx, 1);
+            loop(next);
+          }
+
+          result = count > result ? count : result;
+          state += current[1];
+          count--;
+        }
+      });
+    }
+  }, 0);
+}
+
+/**
+ * 많이 부족함을 느낀다.
+ * 
+ * 진짜 어떻게 공부를 해야할까 방향성 제대로 잡아야할 때가 온것 같다.
+ * 무작정 기능구현 하다보면 실력이 늘겠지 하는 생각이였지만
+ * 벽을 느끼는 중이다.
+ * 
+ * 내 스스로 돌파구를 찾을 수 있길 바란다.
+ */
+
+/**
+ * 사용한 매서드 & 스킬(?)
+ * reduce()
+ * forEach()
+ * 재귀함수(loop)
+ * 완전 탐색
+ */
