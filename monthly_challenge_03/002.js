@@ -27,20 +27,36 @@ numbers           result
 function solution(numbers) {
   let answer = 0;
 
-  for (let i = 0; i < 10; i++) {
-    if (numbers.indexOf(i) == -1) answer += i;
+  for (let i = 0; i <= 9; i++) {
+    if (numbers.indexOf(i) === -1) answer += i;
   }
 
   return answer;
 }
 
-// 다른 풀이(include 활용) (약 1.5배정도 느린듯?)
+/**
+ * [ ] includes() 이용해서 풀어보기
+ * [ ] reduce() 이용해서 풀어보기
+ */
+
+// 다른 풀이
+// includes() 활용
 function solution(numbers) {
   let answer = 0;
 
-  for (let i = 0; i < 10; i++) {
-    if (numbers.includes(i) == false) answer += i;
+  for (let i = 0; i <= 9; i++) {
+    if (numbers.includes(i) === false) answer += i;
   }
 
   return answer;
+}
+
+// reduce() 활용
+function solution(numbers) {
+  const max = 45;
+  const sum = numbers.reduce(
+    (previous, current) => previous + current, 0
+  )
+
+  return max - sum;
 }
