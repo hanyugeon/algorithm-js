@@ -3,16 +3,13 @@ function solution(X, Y) {
   X = X.split("");
   Y = Y.split("");
 
-  const addNumberToAnswer = (storage) => {
-    storage.map((number) => answer.push(number));
-  };
-
   for (let i = 0; i < 10; i += 1) {
     const storageX = X.filter((number) => number === `${i}`);
     const storageY = Y.filter((number) => number === `${i}`);
+
     storageX.length < storageY.length
-      ? addNumberToAnswer(storageX)
-      : addNumberToAnswer(storageY);
+      ? storageX.map((number) => answer.push(number))
+      : storageY.map((number) => answer.push(number));
   }
 
   answer.sort((a, b) => {
