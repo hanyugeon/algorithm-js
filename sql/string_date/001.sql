@@ -1,0 +1,17 @@
+-- STATE_DATE와 END_DATE를 주어진 형식에 맞게 DATE_FORMAT을 활용하여 가져온다
+-- END_DATE와 START_DATE의 차이가 29 미만이면 '단기 대여'
+-- 29 이상이면 '장기 대여'로
+-- RENT_TYPE이라는 컬럼으로 가져온다.
+SELECT HISTORY_ID, CAR_ID,
+    DATE_FORMAT (START_DATE, "%Y-%m-%d") AS START_DATE, 
+    DATE_FORMAT (END_DATE, "%Y-%m-%d") AS END_DATE,
+CASE WHEN DATEDIFF(END_DATE, START_DATE) < 29 then '단기 대여' 
+    ELSE '장기 대여'
+    END AS RENT_TYPE
+FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+
+-- 가져온 테이블에서 START_DATE가 22년 09월에 해당하는것으로 필터링한다.
+WHERE START_DATE LIKE '2022-09-%'
+
+-- HISTORY_ID를 내림차순으로 정렬한다.
+ORDER BY HISTORY_ID DESC;
