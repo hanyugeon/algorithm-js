@@ -67,3 +67,24 @@ function solution(genres, plays) {
 
   return answer;
 }
+
+function solution(genres, plays) {
+  const hashTable = new Map();
+
+  genres
+    .map((genre, idx) => [genre, plays[idx]])
+    .forEach(([genre, play], idx) => {
+      const prevData = hashTable.get(genre) || { total: 0, songs: [] };
+
+      hashTable.set(genre, {
+        total: prevData.total + play,
+        songs: [...prevData.songs, { play, idx }],
+      });
+    });
+
+  return [...hashTable.entries()]
+    .sort((a, b) => b[1].total - a[1].total)
+    .map((genre) => genre[1].songs.sort((a, b) => b.play - a.play).slice(0, 2))
+    .flat()
+    .map((item) => item.idx);
+}
