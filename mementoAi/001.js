@@ -18,10 +18,5 @@ function solution(x, n) {
     answer.push(x * (idx + 1));
   }
 
-  console.log(answer);
   return answer;
 }
-
-solution(2, 5);
-solution(4, 3);
-solution(-4, 2);
