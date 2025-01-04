@@ -44,3 +44,31 @@ function solution(n, computers) {
 
   return answer;
 }
+
+/**
+ * 복습
+ * DFS로 풀이
+ */
+function solution(n, computers) {
+  let answer = 0;
+  const visited = new Array(n).fill(false);
+
+  const dfs = (node) => {
+    visited[node] = true;
+
+    for (let idx = 0; idx < n; idx += 1) {
+      if (computers[node][idx] === 1 && !visited[idx]) {
+        dfs(idx);
+      }
+    }
+  };
+
+  for (let node = 0; node < n; node += 1) {
+    if (!visited[node]) {
+      answer += 1;
+      dfs(node);
+    }
+  }
+
+  return answer;
+}
