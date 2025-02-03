@@ -29,3 +29,29 @@ function solution(numbers, target) {
 
   return answer;
 }
+
+/**
+ * 재귀 함수
+ * 지금보니 정석적인 DFS는 아닌듯
+ * 트리 구조에서의 DFS를 참조해 풀이한 느낌?
+ */
+
+function solution(numbers, target) {
+  let answer = 0;
+
+  const dfs = (acc, idx) => {
+    if (idx === numbers.length - 1) {
+      if (acc === target) answer += 1;
+
+      return;
+    }
+
+    dfs(acc + numbers[idx + 1], idx + 1);
+    dfs(acc - numbers[idx + 1], idx + 1);
+  };
+
+  dfs(numbers[0], 0);
+  dfs(-numbers[0], 0);
+
+  return answer;
+}
