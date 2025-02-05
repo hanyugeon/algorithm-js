@@ -55,3 +55,50 @@ function solution(begin, target, words) {
 
   return answer !== -1 ? answer : 0;
 }
+
+/**
+ * DFS에서 BFS로 바꾸었더니
+ * 평균 실행 시간이 줄어든것을 확인!
+ */
+
+function solution(begin, target, words) {
+  if (words.indexOf(target) === -1) return 0;
+
+  const isVisited = {};
+  words.forEach((word) => (isVisited[word] = 0));
+
+  const isChangeable = (word, target) => {
+    let temp = 0;
+
+    for (let idx = 0; idx < word.length; idx += 1) {
+      if (word[idx] === target[idx]) temp += 1;
+    }
+
+    return temp + 1 === word.length ? true : false;
+  };
+
+  const bfs = () => {
+    const stack = [begin];
+    isVisited[begin] = 1;
+
+    while (stack.length) {
+      const currentNode = stack.shift();
+
+      for (let idx = 0; idx < words.length; idx += 1) {
+        const newNode = words[idx];
+
+        if (isVisited[newNode] !== 0) continue;
+        if (!isChangeable(currentNode, newNode)) continue;
+
+        isVisited[newNode] = isVisited[currentNode] + 1;
+        stack.push(newNode);
+      }
+    }
+  };
+
+  bfs();
+
+  const answer = isVisited[target] - 1;
+
+  return answer !== -1 ? answer : 0;
+}
