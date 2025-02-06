@@ -91,3 +91,40 @@ function solution(tickets) {
  * 도대체 어떤 경우에 통과가 안되는걸까
  * 진짜 모르겠다 하...
  */
+
+// 항공권을 알파벳 순서가 앞서는 경로로만 가도 정답이 나올 수 없다.
+// 그렇다면 다시 사용하지 않은 항공권으로 되돌려야 한다.
+// -> 테스트 케이스 1, 2번이 통과되지 않던 이유
+
+function solution(tickets) {
+  const graph = {};
+
+  for (const [departure, destination] of tickets) {
+    if (!graph[departure]) {
+      graph[departure] = [];
+    }
+
+    graph[departure].push(destination);
+  }
+
+  for (const ticket in graph) {
+    graph[ticket].sort().reverse();
+  }
+
+  const answer = [];
+  const stack = ["ICN"];
+
+  while (stack.length > 0) {
+    const currentNode = stack[stack.length - 1];
+
+    if (graph[currentNode] && graph[currentNode].length > 0) {
+      const newNode = graph[currentNode].pop();
+
+      stack.push(newNode);
+    } else {
+      answer.push(stack.pop());
+    }
+  }
+
+  return answer.reverse();
+}
