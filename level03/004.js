@@ -102,3 +102,61 @@ function solution(begin, target, words) {
 
   return answer !== -1 ? answer : 0;
 }
+
+/**
+ * BFS가 맞을 것 같다, 이유는?
+ * 최솟값을 찾아가며
+ * 최솟값보다 길어지는 경우에는
+ * 모두 return 해버리기
+ */
+
+/**
+ * words에 target이 없다면 early return
+ * 단어를 해시로 확인할 수 있게 객체 테이블 생성
+ * 단어 변환이 가능한지 확인하는 함수 필요
+ */
+
+function solution(begin, target, words) {
+  if (words.indexOf(target) === -1) return 0;
+
+  const isVisited = {};
+  words.forEach((word) => (isVisited[word] = 0));
+
+  const isChangeable = ([curWord, newWord]) => {
+    let diffCount = 0;
+
+    for (let idx = 0; idx < curWord.length; idx += 1) {
+      if (curWord[idx] !== newWord[idx]) {
+        diffCount += 1;
+      }
+
+      if (diffCount > 1) return false;
+    }
+
+    return true;
+  };
+
+  const bfs = () => {
+    const queue = [begin];
+    isVisited[begin] = 0;
+
+    while (queue.length > 0) {
+      const curWord = queue.shift();
+
+      for (let idx = 0; idx < words.length; idx += 1) {
+        const newWord = words[idx];
+
+        if (isVisited[newWord] !== 0) continue;
+        if (curWord === newWord) continue;
+        if (!isChangeable([curWord, newWord])) continue;
+
+        isVisited[newWord] = isVisited[curWord] + 1;
+        queue.push(newWord);
+      }
+    }
+  };
+
+  bfs();
+
+  return isVisited[target];
+}
