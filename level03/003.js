@@ -72,3 +72,47 @@ function solution(n, computers) {
 
   return answer;
 }
+
+/**
+ * 이전에는 재귀 함수로 풀었다면
+ * 이번에는 stack을 활용한 dfs로 풀어보자
+ */
+
+/**
+ * dfs든 bfs든 상관없을 것 같다.
+ * dfs로 풀자. 왜?
+ * javascript에서 shift()보다는 pop()을 사용하는것이
+ * 메모리 사용 측면에서 더 효율적이기 때문에!
+ */
+
+function solution(n, computers) {
+  let answer = 0;
+  const isVisited = Array.from(Array(n), () => false);
+
+  const dfs = (node) => {
+    if (isVisited[node] === true) return;
+    answer += 1;
+
+    const stack = [node];
+
+    while (stack.length > 0) {
+      const curNode = stack.pop();
+      isVisited[node] = true;
+
+      for (let newNode = 0; newNode < computers.length; newNode += 1) {
+        if (curNode === newNode) continue;
+        if (computers[curNode][newNode] === 0) continue;
+        if (isVisited[newNode]) continue;
+
+        isVisited[newNode] = true;
+        stack.push(newNode);
+      }
+    }
+  };
+
+  for (let com = 0; com < computers.length; com += 1) {
+    dfs(com);
+  }
+
+  return answer;
+}
