@@ -203,3 +203,91 @@ function solution(maps) {
 
   return isVisited[n - 1][m - 1] || -1;
 }
+
+/**
+ * 알다시피 JS에서 shift()를 활용한 Queue를 구현하게되면
+ * 시간 복잡도가 O(n) 만큼 더 소요된다.
+ *
+ * class를 활용하여 Queue를 구현하고
+ * 이전의 풀이보다 시간 복잡도를 줄여 풀이해보자!
+ */
+
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.next = null;
+  }
+}
+
+class Queue {
+  constructor() {
+    this.head = null;
+    this.tail = null;
+    this.size = 0;
+  }
+
+  enqueue(newValue) {
+    const newNode = new Node(newValue);
+
+    if (this.head === null) {
+      this.head = this.tail = newNode;
+    } else {
+      this.tail.next = newNode;
+      this.tail = newNode;
+    }
+
+    this.size += 1;
+  }
+
+  dequeue() {
+    const value = this.head.value;
+
+    this.head = this.head.next;
+    this.size -= 1;
+
+    return value;
+  }
+
+  peek() {
+    return this.head.value;
+  }
+}
+
+function solution(maps) {
+  const n = maps.length;
+  const m = maps[0].length;
+
+  if (maps[n - 1][m - 2] === 0 && maps[n - 2][m - 1] === 0) return -1;
+
+  const isVisited = Array.from(Array(n), () => Array(m).fill(null));
+
+  const queue = new Queue();
+  const dx = [0, 1, 0, -1];
+  const dy = [1, 0, -1, 0];
+
+  const bfs = () => {
+    queue.enqueue([0, 0]);
+    isVisited[0][0] = 1;
+
+    while (queue.size > 0) {
+      const [curX, curY] = queue.dequeue();
+
+      for (let dir = 0; dir < 4; dir += 1) {
+        const newX = curX + dx[dir];
+        const newY = curY + dy[dir];
+
+        if (newX < 0 || newX > n - 1) continue;
+        if (newY < 0 || newY > m - 1) continue;
+        if (maps[newX][newY] === 0) continue;
+        if (isVisited[newX][newY] !== null) continue;
+
+        isVisited[newX][newY] = isVisited[curX][curY] + 1;
+        queue.enqueue([newX, newY]);
+      }
+    }
+  };
+
+  bfs();
+
+  return isVisited[n - 1][m - 1] || -1;
+}
