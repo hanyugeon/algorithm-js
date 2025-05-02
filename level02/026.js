@@ -52,3 +52,98 @@ function solution(bridge_length, weight, truck_weights) {
 
   return time;
 }
+
+// 복습
+/**
+ * 트럭 여러 대가 일차선 다리를 정해진 순으로 건넘
+ * 모든 트럭이 다리를 건너려면 최소 몇 초가 걸리는지 return
+ *
+ * 다리에는 트럭이 최대 bridge_length대 올라갈 수 있음
+ * 다리는 weight 이하의 무게를 견딜 수 있음
+ * 다리에 완전히 오르지 않은 트럭의 무게는 무시
+ */
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.next = null;
+  }
+}
+
+class Queue {
+  constructor() {
+    this.head = null;
+    this.tail = null;
+    this.size = 0;
+  }
+
+  enqueue(value) {
+    const newNode = new Node(value);
+
+    if (this.head === null) {
+      this.head = this.tail = newNode;
+    } else {
+      this.tail.next = newNode;
+      this.tail = newNode;
+    }
+
+    this.size += 1;
+  }
+
+  dequeue() {
+    if (this.head === null) return null;
+
+    const value = this.head.value;
+
+    this.head = this.head.next;
+    this.size -= 1;
+
+    return value;
+  }
+
+  peek() {
+    if (this.head === null) return null;
+
+    return this.head.value;
+  }
+}
+
+function solution(bridge_length, weight, truck_weights) {
+  const trucksQueue = new Queue();
+  const bridgeQueue = new Queue();
+  let currentWeight = 0;
+  let time = 0;
+
+  for (const truck of truck_weights) {
+    trucksQueue.enqueue(truck);
+  }
+
+  while (trucksQueue.size >= 0) {
+    // 대기중인 트럭이 0대 일 때
+    if (trucksQueue.size === 0) {
+      time += bridge_length;
+      break;
+    }
+
+    const newTruck = trucksQueue.peek();
+    time += 1;
+
+    // 무게 제한 검사
+    if (currentWeight + newTruck > weight) {
+      bridgeQueue.enqueue(0);
+    } else {
+      bridgeQueue.enqueue(newTruck);
+      trucksQueue.dequeue();
+
+      currentWeight += newTruck;
+    }
+
+    // 도착한 트럭 dequeue
+    if (bridgeQueue.size === bridge_length) {
+      const passedTruck = bridgeQueue.dequeue();
+
+      currentWeight -= passedTruck;
+    }
+  }
+
+  return time;
+}
