@@ -64,3 +64,40 @@ function solution(priorities, location) {
 
   return completedProcesses.length;
 }
+
+/**
+ * 복습
+ *
+ * 굳이 completedProcesses 배열이 필요할까?
+ * priorities 배열이 있는데 또 만들 필요가 있을까?
+ *   만들지 않는다면 힙(Heap)을 구현하면 될 것 같다.
+ * 굳이 한번 더 priorities 배열을 가지고 정렬을 해야할까?
+ *   시간 복잡도 측면에서는 훨씬 효율적인듯
+ *   splice()를 활용하면 분기마다 O(N)이 발생
+ */
+function solution(priorities, location) {
+  const processes = priorities.map((priority, idx) => ({
+    priority: priority,
+    target: idx === location,
+  }));
+  const sortedPriorities = priorities.map((v) => v).sort((a, b) => a - b);
+  let completedCount = 0;
+
+  while (processes.length > 0) {
+    const currentProcess = processes.shift();
+
+    if (
+      currentProcess.priority < sortedPriorities[sortedPriorities.length - 1]
+    ) {
+      processes.push(currentProcess);
+      continue;
+    } else {
+      sortedPriorities.pop();
+      completedCount += 1;
+
+      if (currentProcess.target) return completedCount;
+    }
+  }
+
+  return completedCount;
+}
