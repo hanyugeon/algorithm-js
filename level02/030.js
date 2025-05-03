@@ -98,3 +98,34 @@ function solution(numbers, target) {
 
   return answer;
 }
+
+// 복습
+/**
+ * n개의 양의 정수
+ * 순서를 바꾸지 않고, 적절히 더하거나 빼서 타겟 넘버 만들기
+ *
+ * DFS가 조금 더 적절해보임
+ * 왜? 타겟 넘버인지 판단하려면 무조건 트리 마지막 Node까지 순회해야하기 때문
+ *
+ * dfs에선 stack의 개념을 활용하는 것은 맞지만
+ * 무조건 순수 stack 구조를 만들어야한다는건 아닌 듯 하다.
+ */
+function solution(numbers, target) {
+  let answer = 0;
+
+  const dfs = (acc, idx) => {
+    if (idx === numbers.length - 1) {
+      if (acc !== target) return;
+
+      answer += 1;
+      return;
+    }
+
+    dfs(acc + numbers[idx + 1], idx + 1);
+    dfs(acc - numbers[idx + 1], idx + 1);
+  };
+
+  dfs(0, -1);
+
+  return answer;
+}
