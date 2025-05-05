@@ -160,3 +160,72 @@ function solution(begin, target, words) {
 
   return isVisited[target];
 }
+
+// 복습
+/**
+ * DFS, BFS 둘 중 무엇이 더 효율적일 지 고민
+ * DFS가 더 효율적일 듯
+ */
+function solution(begin, target, words) {
+  if (words.indexOf(target) === -1) return 0;
+  let minChangeCount = 0;
+
+  // 단어 변환 가능여부 return 함수
+  const isChangeable = (word, target) => {
+    let difference = 0;
+
+    for (let idx = 0; idx < word.length; idx += 1) {
+      if (word[idx] !== target[idx]) difference += 1;
+      if (difference > 1) return false;
+    }
+
+    if (difference === 0) return false;
+
+    return true;
+  };
+
+  // dfs 구현
+  const dfs = (initialNode) => {
+    const isVisited = Array(words.length).fill(0);
+    isVisited[initialNode] = 1;
+
+    const stack = [initialNode];
+
+    while (stack.length > 0) {
+      const currentNode = stack.pop();
+      const currentCount = isVisited[currentNode];
+
+      if (words[currentNode] === target) {
+        if (minChangeCount === 0 || minChangeCount > currentCount) {
+          minChangeCount = currentCount;
+        }
+
+        break;
+      }
+
+      if (minChangeCount !== 0 && currentCount >= minChangeCount) break;
+
+      for (let nextNode = 0; nextNode < words.length; nextNode += 1) {
+        if (isVisited[nextNode] !== 0) continue;
+        if (!isChangeable(words[currentNode], words[nextNode])) continue;
+
+        stack.push(nextNode);
+        isVisited[nextNode] = currentCount + 1;
+      }
+    }
+  };
+
+  // 차례대로 words를 순회
+  for (let initialNode = 0; initialNode < words.length; initialNode += 1) {
+    if (!isChangeable(begin, words[initialNode])) continue;
+
+    dfs(initialNode);
+  }
+
+  return minChangeCount;
+}
+/**
+ * 너무 풀이 속도가 느린 것 같다
+ * 풀이 속도도 느리고 DFS, BFS유형 이해도가 많이 죽은듯..
+ * 더 노력하자!
+ */
