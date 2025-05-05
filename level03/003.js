@@ -116,3 +116,101 @@ function solution(n, computers) {
 
   return answer;
 }
+
+// 복습
+/**
+ * 클래스를 활용하여
+ * BFS에 사용될 Queue를 만들어보자.
+ */
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.next = null;
+  }
+}
+
+class Queue {
+  constructor() {
+    this.head = null;
+    this.tail = null;
+    this.size = 0;
+  }
+
+  enQueue(value) {
+    const newNode = new Node(value);
+
+    if (this.head === null) {
+      this.head = this.tail = newNode;
+    } else {
+      this.tail.next = newNode;
+
+      this.tail = newNode;
+    }
+
+    this.size += 1;
+  }
+
+  deQueue() {
+    if (this.size === 0) return null;
+
+    const value = this.head.value;
+
+    this.head = this.head.next;
+    this.size -= 1;
+
+    return value;
+  }
+
+  peek() {
+    if (this.size === 0) return null;
+
+    return this.head.value;
+  }
+}
+
+function solution(n, computers) {
+  let networks = 0;
+  const computersQueue = new Queue();
+  const isVisited = Array(n).fill(false);
+
+  // computer를 하나씩 순회
+  // queue 활용 bfs를 통해 지나간 곳을 모두 체크
+  // 더 이상 queue에 node가 없다면 networks += 1
+
+  // bfs 구현
+  const bfs = (node) => {
+    isVisited[node] = true;
+
+    for (let idx = 0; idx < computers.length; idx += 1) {
+      if (idx === node) continue;
+      if (isVisited[idx] === true) continue;
+      if (computers[node][idx] === 0) continue;
+
+      computersQueue.enQueue(idx);
+    }
+
+    while (computersQueue.size > 0) {
+      const nextNode = computersQueue.deQueue();
+      isVisited[nextNode] = true;
+
+      for (let idx = 0; idx < computers.length; idx += 1) {
+        if (idx === nextNode) continue;
+        if (isVisited[idx] === true) continue;
+        if (computers[nextNode][idx] === 0) continue;
+
+        computersQueue.enQueue(idx);
+      }
+    }
+
+    networks += 1;
+  };
+
+  // 모든 컴퓨터를 순회하며 bfs 실행
+  for (let node = 0; node < computers.length; node += 1) {
+    if (isVisited[node] === true) continue;
+
+    bfs(node);
+  }
+
+  return networks;
+}
